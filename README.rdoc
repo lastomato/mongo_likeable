@@ -23,7 +23,8 @@ After this,
   u = User.new
   u.like?(some_stuff)
 
-  u.like(some_stuff)
+  u.like(some_stuff) # make sure you do this check before like/dislike
+                     # cuz like and dislike the same thing at the same time seems strange
   u.like(*some_array_of_stuffs) # like an array of stuffs
 
   u.dislike(some_other_stuff)
