@@ -1,0 +1,42 @@
+= mongo_likeable
+
+Works for both Mongoid and Mongo_Mapper!
+
+== Installation
+
+In console:
+  gem install mongo_likeable
+or in Gemfile:
+  gem 'mongo_likeable'
+
+== Usage
+
+To make model likeable you need to include Mongo::Likeable into your document:
+
+  class User
+    include Mongoid::Document  #for Mongo_Mapper users, this line of code should be include MongoMapper::Document
+    include Mongo::Likeable
+  end
+
+After this,
+
+  u = User.new
+  u.like?(some_stuff)
+
+  u.like(some_stuff)
+  u.like(*some_array_of_stuffs) # like an array of stuffs
+
+  u.dislike(some_other_stuff)
+
+  u.clear_likes() # if no parameter is given, all likes will be cleared.
+  u.clear_likes(s, s1, s2...)
+
+* Any bug or issue, please send me an email: ustc.flyingfox@gmail.com
+
+== TODO
+
+* like/dislike history.
+
+== Copyright
+
+Copyright (c) Jie Fan. See LICENSE.txt for further details.
