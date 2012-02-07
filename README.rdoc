@@ -31,6 +31,9 @@ After this,
   u.clear_likes() # if no parameter is given, all likes will be cleared.
   u.clear_likes(s, s1, s2...)
 
+  u.like_counts # display total counts
+  u.dislike_counts
+
 * Any bug or issue, please send me an email: ustc.flyingfox@gmail.com
 
 == TODO
