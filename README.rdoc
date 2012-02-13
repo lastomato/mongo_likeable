@@ -35,11 +35,17 @@ After this,
   u.like_counts # display total counts
   u.dislike_counts
 
+  u.all_likers # display all objects who like/dislike u
+  u.all_dislikers
+
+  u.like_history # display like/dislike histories of u
+  u.dislike_history
+
 * Any bug or issue, please send me an email: ustc.flyingfox@gmail.com
 
 == TODO
 
-* like/dislike history.
+* like/dislike history.(DONE)
 
 == Copyright
 

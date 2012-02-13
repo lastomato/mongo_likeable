@@ -7,27 +7,45 @@ module Mongo
         base.field :likes, :type => Array, :default => []
         base.field :dislikes, :type => Array, :default => []
 
-#        base.field :like_history, :type => Array, :default => []
-#        base.field :dislike_history, :type => Array, :default => []
+        base.field :likers, :type => Array, :default => []
+        base.field :dislikers, :type => Array, :default => []
+
+        base.field :like_histories, :type => Array, :default => []
+        base.field :dislike_histories, :type => Array, :default => []
       elsif defined?(MongoMapper)
         base.key :likes, :type => Array, :default => []
         base.key :dislikes, :type => Array, :default => []
 
-#        base.key :like_history, :type => Array, :default => []
-#        base.key :dislike_history, :type => Array, :default => []
+        base.key :likers, :type => Array, :default => []
+        base.key :dislikers, :type => Array, :default => []
+
+        base.key :like_histories, :type => Array, :default => []
+        base.key :dislike_histories, :type => Array, :default => []
       end
     end
 
     def like(*models)
       self.likes |= simplify_instance(*models)
-#      self.like_history |= simplify_instance(*models)
+      self.like_histories |= simplify_instance(*models)
+
+      models.each do |model|
+        model.likers |= simplify_instance(self)
+
+        model.save
+      end
 
       self.save
     end
 
     def dislike(*models)
       self.dislikes |= simplify_instance(*models)
-#      self.dislike_history |= simplify_instance(*models)
+      self.dislike_histories |= simplify_instance(*models)
+
+      models.each do |model|
+        model.likers |= simplify_instance(self)
+
+        model.save
+      end
 
       self.save
     end
@@ -40,13 +58,21 @@ module Mongo
       self.dislikes.length
     end
 
-#    def like_history
-#      rebuild_instance(*self.like_history)
-#    end
-#
-#    def dislike_history
-#      rebuild_instance(*self.dislike_history)
-#    end
+    def all_likers
+      rebuild_instance(*self.likers)
+    end
+
+    def all_dislikers
+      rebuild_instance(*self.dislikers)
+    end
+
+    def like_history
+      rebuild_instance(*self.like_histories)
+    end
+
+    def dislike_history
+      rebuild_instance(*self.dislike_histories)
+    end
 
     def like?(model)
       self.likes.include? simplify_instance(model)[0]
@@ -61,6 +87,12 @@ module Mongo
         self.likes = []
       else
         self.likes -= simplify_instance(*models)
+
+        models.each do |model|
+          model.likers -= simplify_instance(self)
+
+          model.save
+        end
       end
 
       self.save
@@ -71,6 +103,12 @@ module Mongo
         self.dislikes = []
       else
         self.dislikes -= simplify_instance(*models)
+
+        models.each do |model|
+          model.likers -= simplify_instance(self)
+
+          model.save
+        end
       end
 
       self.save
